@@ -1,0 +1,23 @@
+#!/bin/bash
+IP=$2
+
+if echo $IP | grep -q ':'
+then
+    IP=`echo $IP | sed s/:[a-f0-9]*$//`:ab/64
+else
+    IP=`echo $IP | sed s/\.[0-9]*$//`.254/24
+fi
+
+set -e
+
+# For Arduino Duemillanove
+TERM="/dev/ttyUSB0"
+# For Arduino Uno
+#TERM="/dev/ttyACM0"
+#send_break $TERM
+sleep 3
+stty -F $TERM hupcl
+
+sleep 4
+
+launch_panManager slip $IP -p $TERM

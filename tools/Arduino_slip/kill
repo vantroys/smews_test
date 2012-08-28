@@ -1,0 +1,13 @@
+#!/bin/bash
+
+
+# For Arduino Duemilanove
+TERM="/dev/ttyUSB0"
+# For Arduino Uno
+#TERM="/dev/ttyACM0"
+
+send_break $TERM
+
+kill_panManager
+
+exit 0

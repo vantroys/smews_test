@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -e
+
+# Arduino Duemilanove, Uno
+MCU=atmega328p
+# Arduino Mega
+#MCU=atmega2560
+
+TERM="/dev/ttyUSB0"
+#TERM=/dev/ttyACM0
+
+
+# For Arduino Duemilanove
+SPEED=57600 
+# For Arduino Uno
+#SPEED=115200
+# For Arduino Duemilanove, Uno
+PGMER="-c stk500v1 -b $SPEED -P $TERM" 
+
+# AVRDUDE
+AVRDUDE_BIN="/usr/bin/avrdude"
+AVRDUDE_CONF="/usr/local/arduino/arduino-0021/hardware/tools/avrdude.conf"
+AVRDUDE="$AVRDUDE_BIN -F -v -p $MCU -C $AVRDUDE_CONF"
+
+
+TARGET=`cd \`dirname $0\` && pwd`
+TARGET=`basename $TARGET`
+SMEWS_FOLDER=$1
+
+#send_break $TERM
+stty -F $TERM hupcl
+#sleep 1
+$AVRDUDE $PGMER -U flash:w:$SMEWS_FOLDER/bin/$TARGET/smews.bin
